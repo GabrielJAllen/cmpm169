@@ -22,8 +22,6 @@
 
 	<!-- Link to javascript files - DEFER waits until all elements are rendered -->
     <script type="text/javascript" src="../js/site.js" DEFER></script>
-	<!-- Use me for a JavaScript OOP Project -->
-	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
 </head>
@@ -45,17 +43,23 @@
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>What are you trying to acomplish with this experiment?</p>
+				<p>So this experiment is trying to simulate ocean waves rippling</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Describe in detail what you did technically and how it works?</p>
+				<p>So aside from what the sample code is doing in this project, the significant additions I added were an array of three roughly equally distant points on the canvas,
+					which served as the peaks of the wave that should be colored in white, as well as having the logic during the drawing process understand where they are in relation
+					to those peaks. As the lines get drawn in the waves slowly move from left to right and wrap back around.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment.</p>
+				<p>So this was a relatively easy process, after seeing the base output from the code sample I started with, I thought about what natural processes occurr in 
+					diagonal lines, and waves came to mind. So after tweaking the parameters of the initial code all I had to figure out was how to have the lines consider where
+					they were in the waves as how to adjust the colors. The only difficulties in the process was just due to outside events causing undue stress.
+				</p>
 			</div>
 
 		</section>

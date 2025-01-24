@@ -7,24 +7,27 @@
 
 // Constants - User-servicable parts
 // In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+var NORTH = 0;
+var NORTHEAST = 1;
+var EAST = 2;
+var SOUTHEAST = 3;
+var SOUTH = 4;
+var SOUTHWEST = 5;
+var WEST = 6;
+var NORTHWEST = 7;
 
-// Globals
-let myInstance;
-let canvasContainer;
-var centerHorz, centerVert;
+var direction;
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
+var stepSize = 2;
+var diameter = 2;
 
-    myMethod() {
-        // code to run when method is called
-    }
-}
+var posX;
+var posY;
+var peaks;
+var inPeak;
+var checker;
+
+var drawMode = 1;
 
 function resizeScreen() {
   centerHorz = canvasContainer.width() / 2; // Adjusted for drawing logic
@@ -34,46 +37,96 @@ function resizeScreen() {
   // redrawCanvas(); // Redraw everything based on new size
 }
 
-// setup() function is called once when the program starts
 function setup() {
-  // place our canvas, making it fit our container
   canvasContainer = $("#canvas-container");
   let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
   canvas.parent("canvas-container");
   // resize canvas is the page is resized
 
-  // create an instance of the class
-  myInstance = new MyClass("VALUE1", "VALUE2");
-
   $(window).resize(function() {
     resizeScreen();
   });
   resizeScreen();
-}
-
-// draw() function is called repeatedly, it's the main animation loop
-function draw() {
-  background(220);    
-  // call a method on the instance
-  myInstance.myMethod();
-
-  // Set up rotation for the rectangle
-  push(); // Save the current drawing context
-  translate(centerHorz, centerVert); // Move the origin to the rectangle's center
-  rotate(frameCount / 100.0); // Rotate by frameCount to animate the rotation
-  fill(234, 31, 81);
+  colorMode(RGB, 100)
   noStroke();
-  rect(-125, -125, 250, 250); // Draw the rectangle centered on the new origin
-  pop(); // Restore the original drawing context
 
-  // The text is not affected by the translate and rotate
-  fill(255);
-  textStyle(BOLD);
-  textSize(140);
-  text("p5*", centerHorz - 105, centerVert + 40);
+  posX = width / 2;
+  posY = height / 2;
+  peaks = [width/4, width/2, width/1.25];
+  inPeak = false;
 }
 
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
+function draw() {
+  
+  for (var i = 0; i <= 10000; i++) {
+
+      direction = int(random(7));
+
+    if (direction == NORTH) {
+      posY -= stepSize;
+    } else if (direction == NORTHEAST) {
+      posX += stepSize;
+      posY -= stepSize;
+    } else if (direction == EAST) {
+      posX += stepSize;
+    } else if (direction == SOUTHEAST) {
+      posX += stepSize;
+      posY += stepSize;
+    } else if (direction == SOUTH) {
+      posY += stepSize;
+    } else if (direction == SOUTHWEST) {
+      posX -= stepSize;
+      posY += stepSize;
+    } else if (direction == WEST) {
+      posX -= stepSize;
+    } else if (direction == NORTHWEST) {
+      posX -= stepSize;
+      posY -= stepSize;
+    }
+
+    if (posX > width){
+      posX = 0;
+    }
+    if (posX < 0){
+      posX = width;
+    }
+    if (posY < 0){
+      posY = height;
+      inPeak = false;
+      for( var peak in peaks){
+        if(posX >= (peaks[peak] - width/40) && (posX <= peaks[peak] +width/40)){
+          inPeak = true;
+        }
+      }
+    }
+    if (posY > height){
+      posY = 0;
+      inPeak = false;
+      for( var peak in peaks){
+        if(posX >= (peaks[peak] - width/40) && (posX <= peaks[peak] +width/40)){
+          inPeak = true;
+        }
+      }
+    }
+    if( inPeak){
+      fill(80, 90, 100);
+    } else{
+      fill(0, 0, 100);
+    }
+    ellipse(posX + stepSize / 2, posY + stepSize / 2, diameter, diameter);
+  }
+  for( var peak in peaks){
+    //print( peak);
+    peaks[peak]+= width/20
+    if(peaks[peak] >= width){
+      peaks[peak] = 0;
+    }
+    //print(peak);
+  }
+}
+
+function keyReleased() {
+  if (key == 's' || key == 'S') saveCanvas(gd.timestamp(), 'png');
+  if (keyCode == DELETE || keyCode == BACKSPACE) clear();
+
 }
